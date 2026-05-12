@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const archiver = require('archiver');
+const { ZipArchive } = require('archiver');
 
 // FPK打包脚本
 async function packageFPK() {
@@ -17,9 +17,9 @@ async function packageFPK() {
     console.log('📦 开始打包 FPK...');
     console.log(`📝 输出文件: ${outputFileName}`);
     
-    // 创建归档
+    // 创建输出流和归档
     const output = fs.createWriteStream(outputPath);
-    const archive = archiver('zip', {
+    const archive = new ZipArchive({
         zlib: { level: 9 } // 最高压缩级别
     });
     
@@ -65,13 +65,13 @@ async function packageFPK() {
             }
             console.log(`  ✓ 添加: ${p}`);
         } else {
-            console.warn(`  ⚠ 跳过(不存在): ${p}`);
+            console.warn(`  ⚠️ 跳过(不存在): ${p}`);
         }
     });
     
     await archive.finalize();
     
-    // 同时创建一个符号链接或副本作为最新版本
+    // 同时创建一个副本作为最新版本
     const latestPath = path.join(projectRoot, 'dist', `${packageJson.name}.fpk`);
     fs.copyFileSync(outputPath, latestPath);
     console.log(`📎 最新版本: ${latestPath}`);
