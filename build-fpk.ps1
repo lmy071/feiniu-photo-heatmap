@@ -37,24 +37,37 @@ if (Test-Path $TempDir) {
 }
 New-Item -ItemType Directory -Path $TempDir | Out-Null
 
-# Copy items to package
-$ItemsToPackage = @(
-    "app",
-    "cmd",
-    "config",
-    "wizard",
-    "manifest",
-    "ICON.PNG",
-    "ICON_256.PNG"
-)
+# Items to package (directories get filtered, files copied directly)
+$DirsToPackage = @("app", "cmd", "config", "wizard")
+$FilesToPackage = @("manifest", "ICON.PNG", "ICON_256.PNG")
 
-foreach ($item in $ItemsToPackage) {
-    $srcPath = Join-Path $ProjectDir $item
+# Exclude patterns for directory copying
+$ExcludeDirs = @("node_modules", "dist", ".vite", ".DS_Store")
+$ExcludeFiles = @("package-lock.json", "tsconfig.tsbuildinfo")
+
+# Copy directories with exclusions
+foreach ($dir in $DirsToPackage) {
+    $srcPath = Join-Path $ProjectDir $dir
     if (Test-Path $srcPath) {
-        Copy-Item -Path $srcPath -Destination $TempDir -Recurse -Force
-        Write-Host "  [OK] Added: $item"
+        $dstPath = Join-Path $TempDir $dir
+        # Use robocopy for efficient filtered copy
+        $excludeArgs = $ExcludeDirs | ForEach-Object { "/XD", $_ }
+        $excludeFileArgs = $ExcludeFiles | ForEach-Object { "/XF", "$_" }
+        robocopy $srcPath $dstPath /E /NFL /NDL /NJH /NJS /NC /NS /NP @excludeArgs @excludeFileArgs | Out-Null
+        Write-Host "  [OK] Added: $dir"
     } else {
-        Write-Host "  [SKIP] Not found: $item" -ForegroundColor Yellow
+        Write-Host "  [SKIP] Not found: $dir" -ForegroundColor Yellow
+    }
+}
+
+# Copy individual files
+foreach ($file in $FilesToPackage) {
+    $srcPath = Join-Path $ProjectDir $file
+    if (Test-Path $srcPath) {
+        Copy-Item -Path $srcPath -Destination $TempDir -Force
+        Write-Host "  [OK] Added: $file"
+    } else {
+        Write-Host "  [SKIP] Not found: $file" -ForegroundColor Yellow
     }
 }
 

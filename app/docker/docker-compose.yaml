@@ -9,8 +9,18 @@ services:
       - "8088:3000"
     volumes:
       - ./app:/app
+      - ./www:/www-src
     working_dir: /app
-    command: sh -c "npm install && node server.js"
+    command: sh -c "
+      echo '=== Building Vue frontend ===' &&
+      cd /www-src &&
+      npm install &&
+      npm run build &&
+      echo '=== Starting backend ===' &&
+      cd /app &&
+      npm install &&
+      node server.js
+    "
     healthcheck:
       test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:3000/"]
       interval: 30s
