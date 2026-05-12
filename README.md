@@ -1,109 +1,183 @@
-# 飞牛相册热力图
+﻿# 📸 飞牛相册照片热力图
 
-展示飞牛 NAS 每日照片数量的 GitHub 风格热力图应用。
-
-## 架构
-
-```
-浏览器 → Vue 3 SPA → /api/photos → Node.js 后端 → 飞牛 NAS 相册 API
-                                              ↓ (API 不可用时)
-                                         演示数据降级
-```
-
-- **前端**: Vue 3 + TypeScript + Vite，CalHeatmap 4.0 渲染热力图
-- **后端**: Express + Axios，代理飞牛 NAS API 请求（解决 CORS / 认证问题）
-- **部署**: Docker (node:18-alpine)，飞牛 NAS 应用中心 FPK 安装
-
-## 目录结构
-
-```
-feiniu-photo-heatmap/
-├── app/
-│   ├── docker/
-│   │   ├── app/
-│   │   │   ├── server.js          # Node.js 后端（Express + API 代理）
-│   │   │   └── package.json       # 后端依赖
-│   │   ├── www/                   # Vue 3 + TypeScript 前端项目
-│   │   │   ├── src/
-│   │   │   │   ├── api/           # API 调用层
-│   │   │   │   ├── components/    # Vue 组件
-│   │   │   │   ├── composables/   # 组合式函数
-│   │   │   │   ├── types/         # TypeScript 类型定义
-│   │   │   │   ├── App.vue        # 根组件
-│   │   │   │   └── main.ts        # 入口
-│   │   │   ├── index.html         # HTML 模板
-│   │   │   ├── vite.config.ts     # Vite 配置
-│   │   │   ├── tsconfig.json      # TypeScript 配置
-│   │   │   └── package.json       # 前端依赖
-│   │   └── docker-compose.yaml    # Docker 编排
-│   └── ui/
-│       ├── config                 # 飞牛 UI 配置
-│       └── images/                # UI 图标
-├── cmd/                           # 飞牛应用生命周期脚本
-├── config/                        # 权限和资源配置
-├── wizard/                        # 安装向导
-├── manifest                       # 飞牛应用清单
-├── ICON.PNG / ICON_256.PNG        # 应用图标
-├── build-fpk.ps1                  # FPK 构建脚本
-└── README.md
-```
-
-## 前端开发
-
-```bash
-cd app/docker/www
-
-# 安装依赖
-npm install
-
-# 开发模式（热更新，自动代理 /api 到后端）
-npm run dev
-
-# 生产构建
-npm run build
-```
-
-## 构建 & 安装
-
-### 构建 FPK
-
-```powershell
-.\build-fpk.ps1
-```
-
-### 安装到飞牛 NAS
-
-1. 打开飞牛 NAS 网页界面
-2. 进入 **应用中心 → 手动安装**
-3. 上传生成的 `.fpk` 文件
-4. 安装后访问 `http://NAS-IP:8088`
-
-## Docker 启动流程
-
-容器启动时自动执行：
-1. 安装前端依赖 + 构建 Vue 项目 → `www/dist/`
-2. 安装后端依赖 + 启动 Express 服务
-3. 后端服务静态文件 `www/dist/` 并代理 `/api/*` 请求
+类似 GitHub 提交热力图的可视化工具，展示飞牛相册中每日照片数量分布。
 
 ## 功能特性
 
-- 📊 GitHub 风格热力图，展示每日照片数量
-- 📅 支持按年/全部/近一年筛选
-- 🔄 演示数据自动降级（API 不可用时）
-- 🐳 Docker 容器化部署
-- 🔒 后端代理认证（自动转发 Cookie）
-- 💡 Vue 3 + TypeScript + Vite 现代前端架构
+- 🎨 类似 GitHub 贡献热力图的视觉效果
+- 📊 统计每日照片数量分布
+- 🖱️ 悬停查看每日照片数量详情
+- 🔄 自动缓存数据，减少 API 调用
+- 🐳 支持 Docker 部署
+- 📦 支持飞牛 NAS (fnOS) fpk 安装包
+
+## 项目结构
+
+```
+feiniu-photo-heatmap/
+├── src/                    # Vue 前端源码
+│   ├── components/         # Vue 组件
+│   ├── composables/        # Vue Composables
+│   ├── types/              # TypeScript 类型定义
+│   └── assets/             # 静态资源
+├── server/                 # Node.js 后端服务
+│   └── index.js            # Express 服务器
+├── docker/                 # Docker 部署文件
+│   ├── Dockerfile
+│   ├── docker-compose.yml
+│   └── manifest.json       # fnOS 应用描述
+├── scripts/                # 构建脚本
+│   ├── build-fpk.sh       # Linux/Mac 构建脚本
+│   └── build-fpk.ps1       # Windows 构建脚本
+└── package.json
+```
+
+## 快速开始
+
+### 方式一：Docker 部署
+
+1. 克隆项目并进入目录：
+```bash
+git clone https://github.com/your-repo/feiniu-photo-heatmap.git
+cd feiniu-photo-heatmap
+```
+
+2. 配置环境变量：
+```bash
+cp server/.env.example server/.env
+# 编辑 .env 文件，填入你的飞牛 NAS 配置
+```
+
+3. 启动服务：
+```bash
+docker-compose -f docker/docker-compose.yml up -d
+```
+
+4. 访问 http://localhost:3000
+
+### 方式二：本地开发
+
+1. 安装前端依赖：
+```bash
+npm install
+```
+
+2. 安装后端依赖：
+```bash
+cd server
+npm install
+cd ..
+```
+
+3. 配置后端环境变量：
+```bash
+cp server/.env.example server/.env
+# 编辑 .env 文件
+```
+
+4. 启动后端服务：
+```bash
+npm run server
+```
+
+5. 启动前端开发服务器：
+```bash
+npm run dev
+```
+
+6. 访问 http://localhost:5173
+
+## 配置说明
+
+### 环境变量
+
+| 变量名 | 说明 | 默认值 |
+|--------|------|--------|
+| FEINIU_URL | 飞牛 NAS 的 WebDAV 地址 | http://192.168.1.100:3000 |
+| FEINIU_USERNAME | WebDAV 用户名 | admin |
+| FEINIU_PASSWORD | WebDAV 密码 | (无) |
+| ALBUM_PATH | 相册路径 | /photos |
+| PORT | 服务端口 | 3000 |
+
+### 飞牛 NAS WebDAV 配置
+
+飞牛 NAS 的相册通常可以通过 WebDAV 访问：
+- 地址格式：`http://<NAS_IP>:<端口>` 或 `https://<域名>`
+- 默认 WebDAV 端口：3000
+- 用户名密码与 NAS 登录凭据相同
+
+## 构建 fpk 安装包
+
+### 前置要求
+
+- Docker 已安装并运行
+
+### Windows
+
+```powershell
+.\scripts\build-fpk.ps1
+```
+
+### Linux / Mac
+
+```bash
+chmod +x scripts/build-fpk.sh
+./scripts/build-fpk.sh
+```
+
+构建完成后，fpk 文件会生成在 `build/` 目录下。
+
+### 安装 fpk
+
+1. 将生成的 fpk 文件上传到飞牛 NAS
+2. 登录 fnOS 管理界面
+3. 进入「应用中心」→「导入应用」
+4. 选择 fpk 文件
+5. 填写配置信息（飞牛 NAS 地址、用户名、密码）
+6. 点击安装
+
+## API 接口
+
+### 获取照片统计
+
+```
+GET /api/photos/stats
+```
+
+可选查询参数：
+- `startDate`: 起始日期 (YYYY-MM-DD)
+- `endDate`: 结束日期 (YYYY-MM-DD)
+
+响应示例：
+```json
+{
+  "totalPhotos": 1234,
+  "totalDays": 365,
+  "dailyStats": [
+    { "date": "2024-01-01", "count": 5 },
+    { "date": "2024-01-02", "count": 12 }
+  ]
+}
+```
+
+### 健康检查
+
+```
+GET /api/health
+```
 
 ## 技术栈
 
-| 组件 | 技术 |
-|------|------|
-| 前端框架 | Vue 3.5 + TypeScript 5.7 |
-| 构建工具 | Vite 6 |
-| 热力图 | CalHeatmap 4.2 |
-| 后端 | Node.js 18 + Express + Axios |
-| 部署 | Docker (node:18-alpine) |
-| 打包 | FPK (飞牛应用包格式) |
+- **前端**: Vue 3 + TypeScript + Vite
+- **后端**: Node.js + Express
+- **WebDAV 客户端**: webdav
+- **部署**: Docker
+
+## 注意事项
+
+1. 首次加载可能需要较长时间获取所有照片信息
+2. 照片数据会缓存 30 分钟
+3. 确保 WebDAV 访问权限正确配置
 
 ## License
 

@@ -1,49 +1,28 @@
-# 依赖
+﻿# Dependencies
 node_modules/
-package-lock.json
-yarn.lock
+server/node_modules/
 
-# 构建输出
+# Build output
 dist/
-build/
-*.fpk
-
-# 日志
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# 环境配置
-.env
-.<EMAIL_REDACTED>
-.env.*.local
 
 # IDE
-.vscode/
 .idea/
+.vscode/
 *.swp
 *.swo
-*~
 
 # OS
-Thumbs.db
-Desktop.ini
 .DS_Store
+Thumbs.db
 
-# 临时文件
-tmp/
-temp/
-*.tmp
+# Logs
+*.log
+npm-debug.log*
 
-# 测试
-coverage/
-.nyc_output/
+# Environment
+.env
+.env.local
+.env.*.local
 
-# 飞牛NAS
-data/
-config.json
-
-# FPK 打包 (fnpack)
-fpk/app/www/node_modules/
-fpk/*.fpk
+# Lock files (optional, can keep for reproducibility)
+# package-lock.json

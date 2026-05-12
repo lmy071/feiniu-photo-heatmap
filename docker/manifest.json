@@ -1,0 +1,62 @@
+﻿{
+  "name": "feiniu-photo-heatmap",
+  "version": "1.0.0",
+  "title": "飞牛相册照片热力图",
+  "description": "类似 GitHub 提交热力图，展示飞牛相册每日照片数量分布",
+  "author": {
+    "name": "Developer",
+    "email": "developer@example.com"
+  },
+  "architecture": ["amd64", "arm64"],
+  "homepage": "https://github.com/your-repo/feiniu-photo-heatmap",
+  "icon": "icon.png",
+  "screenshots": ["screenshot.png"],
+  "categories": ["工具", "相册"],
+  "requirements": {
+    "fnos_version": ">=1.0.0",
+    "docker": true
+  },
+  "settings": [
+    {
+      "key": "FEINIU_URL",
+      "label": "飞牛 NAS 地址",
+      "description": "飞牛 NAS 的访问地址，例如 http://192.168.1.100:3000",
+      "type": "string",
+      "default": "http://192.168.1.100:3000",
+      "required": true
+    },
+    {
+      "key": "FEINIU_USERNAME",
+      "label": "用户名",
+      "description": "飞牛 NAS 的用户名",
+      "type": "string",
+      "default": "admin",
+      "required": true
+    },
+    {
+      "key": "FEINIU_PASSWORD",
+      "label": "密码",
+      "description": "飞牛 NAS 的密码",
+      "type": "password",
+      "required": true
+    },
+    {
+      "key": "ALBUM_PATH",
+      "label": "相册路径",
+      "description": "飞牛相册的 WebDAV 路径",
+      "type": "string",
+      "default": "/photos",
+      "required": false
+    }
+  ],
+  "ports": [
+    {
+      "container": 3000,
+      "host": 3000,
+      "protocol": "tcp",
+      "description": "Web 服务端口"
+    }
+  ],
+  "volumes": [],
+  "networks": ["default"]
+}

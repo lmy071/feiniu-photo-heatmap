@@ -1,0 +1,26 @@
+﻿version: '"'"'3.8'"'"'
+
+services:
+  feiniu-photo-heatmap:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: feiniu-photo-heatmap
+    restart: unless-stopped
+    ports:
+      - '"'"'3000:3000'"'"'
+    environment:
+      - FEINIU_URL=${FEINIU_URL:-http://192.168.1.100:3000}
+      - FEINIU_USERNAME=${FEINIU_USERNAME:-admin}
+      - FEINIU_PASSWORD=${FEINIU_PASSWORD}
+      - ALBUM_PATH=${ALBUM_PATH:-/photos}
+      - PORT=3000
+    volumes:
+      # 可选：挂载配置文件
+      # - ./config:/app/config:ro
+    networks:
+      - default
+
+networks:
+  default:
+    name: feiniu-network
