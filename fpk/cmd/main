@@ -2,10 +2,39 @@
 
 LOG_FILE="${TRIM_PKGVAR}/info.log"
 PID_FILE="${TRIM_PKGVAR}/app.pid"
-APP_DIR="${TRIM_PKGVAR}/app"
-WWW_DIR="${APP_DIR}/www"
+WWW_DIR="${TRIM_PKGVAR}/app/www/public"
+PORT=8088
 
-CMD="cd ${WWW_DIR} && node server.js"
+# 尝试多种静态文件服务器
+find_server() {
+    # 1. busybox httpd (飞牛NAS基于Debian，通常有busybox)
+    if command -v busybox &> /dev/null; then
+        echo "busybox httpd -p ${PORT} -h ${WWW_DIR}"
+        return 0
+    fi
+    
+    # 2. python3
+    if command -v python3 &> /dev/null; then
+        echo "python3 -m http.server ${PORT} --directory ${WWW_DIR}"
+        return 0
+    fi
+    
+    # 3. python
+    if command -v python &> /dev/null; then
+        echo "python -m SimpleHTTPServer ${PORT}"
+        cd "${WWW_DIR}" && echo "python -m SimpleHTTPServer ${PORT}"
+        return 0
+    fi
+    
+    # 4. node (如果有的话)
+    if command -v node &> /dev/null; then
+        # 使用内置的简单静态服务
+        echo "node -e \"require('http').createServer((req,res)=>{const p=require('path').join('${WWW_DIR}',req.url==='/'?'index.html':req.url);const fs=require('fs');fs.readFile(p,(e,d)=>{if(e){res.writeHead(404);res.end()}else{const ext=p.split('.').pop();const t={'html':'text/html','css':'text/css','js':'application/javascript','json':'application/json','png':'image/png','svg':'image/svg+xml'}[ext]||'text/plain';res.writeHead(200,{'Content-Type':t});res.end(d)}}).listen(${PORT},()=>console.log('OK on ${PORT}'))}\""
+        return 0
+    fi
+    
+    return 1
+}
 
 log_msg() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" >> ${LOG_FILE}
@@ -16,8 +45,16 @@ start_process() {
         return 0
     fi
 
-    log_msg "Starting process ..."
+    log_msg "Starting static file server on port ${PORT}..."
+    
+    CMD=$(find_server)
+    if [ $? -ne 0 ]; then
+        log_msg "ERROR: No available HTTP server found"
+        exit 1
+    fi
+    
     log_msg "CMD = ${CMD}"
+    cd "${WWW_DIR}"
     bash -c "${CMD}" >> ${LOG_FILE} 2>&1 &
     printf "%s" "$!" > ${PID_FILE}
     log_msg "pid = $!"

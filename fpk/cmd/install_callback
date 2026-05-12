@@ -1,5 +1,5 @@
 #!/bin/bash
 
 ### This script is called after the user installs the application.
-### Dependencies are pre-packaged in node_modules, no npm install needed.
+### Pure static app, no dependencies to install.
 exit 0
