@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>飞牛相册热力图</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cal-heatmap@4.0.0/cal-heatmap.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            background: #667eea;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn.active {
+            background: #764ba2;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .stat-card h3 {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+        
+        .stat-card .value {
+            font-size: 32px;
+            font-weight: bold;
+        }
+        
+        #heatmap {
+            margin-top: 30px;
+            overflow-x: auto;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: #999;
+            font-size: 18px;
+        }
+        
+        .loading::after {
+            content: '...';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+        
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+        
+        .cal-heatmap-container {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        
+        .cal-heatmap-container .graph-label {
+            fill: #666;
+            font-size: 12px;
+        }
+        
+        .cal-heatmap-container .graph-rect {
+            stroke: white;
+            stroke-width: 1px;
+            rx: 2;
+            ry: 2;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📸 飞牛相册热力图</h1>
+        <p class="subtitle">展示每日照片数量，类似GitHub贡献图</p>
+        
+        <div class="controls">
+            <button class="btn active" onclick="loadData('year')">近一年</button>
+            <button class="btn" onclick="loadData('all')">全部</button>
+            <button class="btn" onclick="loadData('2024')">2024</button>
+            <button class="btn" onclick="loadData('2023')">2023</button>
+            <button class="btn" onclick="refreshData()">🔄 刷新</button>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <h3>总照片数</h3>
+                <div class="value" id="totalPhotos">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>最长连续拍摄</h3>
+                <div class="value" id="longestStreak">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>最多照片日</h3>
+                <div class="value" id="maxPhotos">-</div>
+            </div>
+        </div>
+        
+        <div id="heatmap">
+            <div class="loading">加载中</div>
+        </div>
+        
+        <div class="footer">
+            数据来源：飞牛NAS相册 | 最后更新：<span id="lastUpdate">-</span>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.8.0/dist/d3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cal-heatmap@4.0.0/cal-heatmap.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
