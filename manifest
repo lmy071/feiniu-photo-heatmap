@@ -1,0 +1,10 @@
+appname               = feiniu-photo-heatmap
+version               = 1.0.0
+display_name          = 飞牛相册热力图
+desc                  = 展示每日照片数量的GitHub风格热力图
+arch                  = x86_64
+source                = thirdparty
+maintainer            = QClaw
+distributor           = QClaw
+desktop_uidir         = ui
+desktop_applaunchname = feiniu-photo-heatmap.Application

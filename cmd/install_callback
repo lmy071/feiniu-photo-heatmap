@@ -1,5 +1,5 @@
 #!/bin/bash
 
 ### This script is called after the user installs the application.
-### Pure static app, no dependencies to install.
+
 exit 0

@@ -1,95 +1,88 @@
-# 飞牛NAS相册热力图
+# 飞牛相册热力图
 
-[![GitHub](https://img.shields.io/badge/GitHub-lmy071-blue?logo=github)](https://github.com/lmy071/feiniu-photo-heatmap)
+展示飞牛 NAS 每日照片数量的 GitHub 风格热力图应用。
 
-一个飞牛NAS应用，用于读取飞牛相册照片数据，生成类似GitHub贡献图的热力图，展示每日照片数量。
+## 架构
 
-## 🌐 在线演示
+```
+浏览器 → Node.js 后端 (/api/photos) → 飞牛 NAS 相册 API
+                ↓ (API 不可用时)
+           演示数据降级
+```
 
-克隆仓库后在本地运行即可查看效果。
+- **后端**: Express + Axios，代理飞牛 NAS API 请求（解决 CORS / 认证问题）
+- **前端**: 单页 HTML，ES Module 加载 CalHeatmap 4.0
+- **部署**: Docker (node:18-alpine)，飞牛 NAS 应用中心 FPK 安装
+
+## 目录结构
+
+```
+feiniu-photo-heatmap/
+├── app/
+│   ├── docker/
+│   │   ├── app/
+│   │   │   ├── server.js          # Node.js 后端（Express + API 代理）
+│   │   │   └── package.json       # 后端依赖
+│   │   ├── www/
+│   │   │   ├── index.html         # 前端页面
+│   │   │   └── images/            # 图标资源
+│   │   └── docker-compose.yaml    # Docker 编排
+│   └── ui/
+│       ├── config                 # 飞牛 UI 配置
+│       └── images/                # UI 图标
+├── cmd/                           # 飞牛应用生命周期脚本
+│   ├── main                       # 启动/停止/状态检查
+│   ├── install_init
+│   ├── install_callback
+│   ├── uninstall_init
+│   ├── uninstall_callback
+│   ├── upgrade_init
+│   ├── upgrade_callback
+│   ├── config_init
+│   └── config_callback
+├── config/
+│   ├── privilege                  # 权限配置
+│   └── resource                   # 资源配置
+├── wizard/                        # 安装向导
+├── manifest                       # 飞牛应用清单
+├── ICON.PNG                       # 应用图标 64x64
+├── ICON_256.PNG                   # 应用图标 256x256
+├── build-fpk.ps1                  # FPK 构建脚本
+└── README.md
+```
+
+## 构建 & 安装
+
+### 构建 FPK
+
+```powershell
+.\build-fpk.ps1
+```
+
+### 安装到飞牛 NAS
+
+1. 打开飞牛 NAS 网页界面
+2. 进入 **应用中心 → 手动安装**
+3. 上传生成的 `.fpk` 文件
+4. 安装后访问 `http://NAS-IP:8088`
 
 ## 功能特性
 
-- 📸 读取飞牛相册所有照片
-- 📊 生成类似GitHub的贡献热力图
-- 📅 支持按年/月查看
-- 🎨 自定义颜色主题
-- 📱 响应式设计，支持移动端
-
-## 安装部署
-
-### 方法一：FPK包安装
-1. 下载 `feiniu-photo-heatmap.fpk` 包
-2. 在飞牛NAS应用中心中安装
-3. 启动应用
-
-### 方法二：手动部署
-```bash
-# 克隆仓库
-git clone https://github.com/lmy071/feiniu-photo-heatmap.git
-
-# 安装依赖
-cd feiniu-photo-heatmap
-npm install
-
-# 配置环境变量
-cp .env.example .env
-# 编辑 .env 文件，配置飞牛NAS的IP地址等信息
-
-# 启动服务
-npm start
-```
-
-## 配置
-
-在项目根目录创建 `.env` 文件（参考 `.env.example`）：
-```bash
-# 飞牛NAS配置
-NAS_IP=192.168.1.100
-NAS_PORT=8080
-NAS_USER=your_username
-NAS_PASS=your_password
-
-# 应用端口
-PORT=8088
-```
-
-或者在环境变量中配置：
-- `NAS_IP`: 飞牛NAS IP地址
-- `NAS_PORT`: API端口（默认8080）
-- `NAS_USER`: 用户名（可选）
-- `NAS_PASS`: 密码（可选）
-
-## 开发
-
-```bash
-# 开发模式
-npm run dev
-
-# 打包FPK
-npm run package
-```
+- 📊 GitHub 风格热力图，展示每日照片数量
+- 📅 支持按年/全部/近一年筛选
+- 🔄 演示数据自动降级（API 不可用时）
+- 🐳 Docker 容器化部署
+- 🔒 后端代理认证（自动转发 Cookie）
 
 ## 技术栈
 
-- 后端：Node.js + Express
-- 前端：Cal-Heatmap + D3.js
-- 打包：Webpack
+| 组件 | 技术 |
+|------|------|
+| 后端 | Node.js 18 + Express + Axios |
+| 前端 | 原生 HTML/JS + CalHeatmap 4.0 (CDN) |
+| 部署 | Docker (node:18-alpine) |
+| 打包 | FPK (飞牛应用包格式) |
 
-## 许可证
+## License
 
-MIT License
-
-## 作者
-
-lmy071 - Initial work
-
-## 仓库地址
-
-- GitHub: https://github.com/lmy071/feiniu-photo-heatmap
-- Issue跟踪: https://github.com/lmy071/feiniu-photo-heatmap/issues
-
-## 致谢
-
-- 飞牛NAS团队
-- Cal-Heatmap项目
+MIT
