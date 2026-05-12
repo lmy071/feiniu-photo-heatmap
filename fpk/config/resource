@@ -1,0 +1,14 @@
+{
+    "data-share": {
+        "shares": [
+            {
+                "name": "feiniu-photo-heatmap",
+                "permission": {
+                    "rw": [
+                        "feiniu-photo-heatmap"
+                    ]
+                }
+            }
+        ]
+    }
+}

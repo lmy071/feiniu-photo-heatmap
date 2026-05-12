@@ -43,3 +43,7 @@ coverage/
 # 飞牛NAS
 data/
 config.json
+
+# FPK 打包 (fnpack)
+fpk/app/www/node_modules/
+fpk/*.fpk

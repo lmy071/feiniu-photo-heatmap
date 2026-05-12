@@ -1,0 +1,10 @@
+appname=feiniu-photo-heatmap
+version=1.0.0
+display_name=飞牛相册热力图
+desc=飞牛NAS相册照片热力图 - 类似GitHub贡献图展示每日照片数量分布
+arch=x86_64
+source=thirdparty
+maintainer=feiniu-dev
+distributor=feiniu-dev
+desktop_uidir=ui
+desktop_applaunchname=feiniu-photo-heatmap.Application
