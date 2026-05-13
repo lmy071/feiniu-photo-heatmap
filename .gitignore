@@ -4,6 +4,9 @@ server/node_modules/
 
 # Build output
 dist/
+build/
+build-nas/
+server/public/
 
 # IDE
 .idea/

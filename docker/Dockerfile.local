@@ -1,0 +1,21 @@
+# 飞牛相册照片热力图 - 简化版 Dockerfile
+# 用于在 NAS 上本地构建
+
+FROM node:20-alpine
+
+WORKDIR /app
+
+# 复制后端代码
+COPY server/package*.json ./
+RUN npm ci --omit=dev
+
+COPY server/index.js ./
+
+# 复制前端静态文件（已在开发机器上构建好）
+COPY server/public ./public
+
+# 暴露端口
+EXPOSE 3000
+
+# 启动命令
+CMD ["node", "index.js"]
