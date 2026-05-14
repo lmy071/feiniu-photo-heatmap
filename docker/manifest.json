@@ -1,14 +1,14 @@
-﻿{
+{
   "name": "feiniu-photo-heatmap",
   "version": "1.0.0",
-  "title": "飞牛相册照片热力图",
-  "description": "类似 GitHub 提交热力图，展示飞牛相册每日照片数量分布",
+  "title": "飞牛照片热力图",
+  "description": "扫描飞牛 NAS 照片目录，生成 GitHub 风格的每日照片数量热力图",
   "author": {
-    "name": "Developer",
-    "email": "developer@example.com"
+    "name": "lmy",
+    "email": "lmy071@icoud.com"
   },
   "architecture": ["amd64", "arm64"],
-  "homepage": "https://github.com/your-repo/feiniu-photo-heatmap",
+  "homepage": "https://github.com/lmy071/feiniu-photo-heatmap",
   "icon": "icon.png",
   "screenshots": ["screenshot.png"],
   "categories": ["工具", "相册"],
@@ -18,34 +18,19 @@
   },
   "settings": [
     {
-      "key": "FEINIU_URL",
-      "label": "飞牛 NAS 地址",
-      "description": "飞牛 NAS 的访问地址，例如 http://192.168.1.100:3000",
-      "type": "string",
-      "default": "http://192.168.1.100:3000",
-      "required": true
-    },
-    {
-      "key": "FEINIU_USERNAME",
-      "label": "用户名",
-      "description": "飞牛 NAS 的用户名",
-      "type": "string",
-      "default": "admin",
-      "required": true
-    },
-    {
-      "key": "FEINIU_PASSWORD",
-      "label": "密码",
-      "description": "飞牛 NAS 的密码",
-      "type": "password",
-      "required": true
-    },
-    {
-      "key": "ALBUM_PATH",
-      "label": "相册路径",
-      "description": "飞牛相册的 WebDAV 路径",
+      "key": "SCAN_PATHS",
+      "label": "照片扫描路径",
+      "description": "飞牛 NAS 上的照片目录，多个路径用逗号分隔。默认从 /volume1/photo 或 /vol1/1000/Photo 挂载",
       "type": "string",
       "default": "/photos",
+      "required": true
+    },
+    {
+      "key": "PORT",
+      "label": "Web 端口",
+      "description": "Web 服务端口",
+      "type": "number",
+      "default": 3000,
       "required": false
     }
   ],
@@ -57,6 +42,13 @@
       "description": "Web 服务端口"
     }
   ],
-  "volumes": [],
+  "volumes": [
+    {
+      "host": "/vol1/1000/Photo",
+      "container": "/photos",
+      "mode": "ro",
+      "description": "飞牛相册目录"
+    }
+  ],
   "networks": ["default"]
 }

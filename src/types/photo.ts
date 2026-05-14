@@ -1,17 +1,21 @@
-﻿export interface DailyStat {
-  date: string  // 格式: yyyy-MM-dd
-  count: number // 该日照片数量
+export interface DailyStat {
+  date: string   // yyyy-MM-dd
+  count: number
 }
 
 export interface PhotoStats {
-  totalPhotos: number  // 总照片数
-  totalDays: number    // 有照片的天数
+  totalPhotos: number
+  totalDays: number
   dailyStats: DailyStat[]
+  lastScan: number
 }
 
-export interface PhotoAlbumConfig {
-  baseUrl: string      // 飞牛 NAS 的 URL
-  username: string      // 用户名
-  password: string      // 密码
-  albumPath: string     // 相册路径，默认为 "/photos"
+export interface ScanStatus {
+  scanning: boolean
+  progress: number
+  lastScan: string | null
+  totalPhotos: number
+  totalDays: number
+  scanPaths: string[]
+  lastError: string | null
 }

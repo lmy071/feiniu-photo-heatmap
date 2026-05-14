@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "feiniu-photo-heatmap-server",
   "version": "1.0.0",
   "type": "module",
@@ -10,7 +10,6 @@
   "dependencies": {
     "express": "^4.18.2",
     "cors": "^2.8.5",
-    "webdav": "^5.4.0",
     "dotenv": "^16.4.5"
   }
 }
