@@ -2,9 +2,7 @@ version: '3.8'
 
 services:
   feiniu-photo-heatmap:
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile
+    image: feiniu-photo-heatmap:latest
     container_name: feiniu-photo-heatmap
     restart: unless-stopped
     ports:

@@ -12,8 +12,8 @@
   "icon": "icon.png",
   "screenshots": ["screenshot.png"],
   "categories": ["工具", "相册"],
+  "min_fnos_version": "1.0.0",
   "requirements": {
-    "fnos_version": ">=1.0.0",
     "docker": true
   },
   "settings": [
