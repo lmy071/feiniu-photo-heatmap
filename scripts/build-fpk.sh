@@ -67,6 +67,7 @@ def make_icon(size, path):
     with open(path,'wb') as f:f.write(hdr+ihdr+idat+iend)
 make_icon(64, '${FPK_DIR}/ICON.PNG')
 make_icon(256, '${FPK_DIR}/ICON_256.PNG')
+cp '${FPK_DIR}'/ICON_256.PNG '${FPK_DIR}'/ui/images/256.png 2>/dev/null || true
 PYEOF
 
 # 步骤4: 更新校验和

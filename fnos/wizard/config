@@ -1,19 +1,16 @@
-{
-    "page": [
-        {
-            "title": "照片目录设置",
-            "desc": "设置飞牛 NAS 照片目录的挂载路径",
-            "form": [
-                {
-                    "key": "SCAN_DIR",
-                    "title": "照片路径",
-                    "desc": "NAS 上照片目录的实际路径（如 /volume1/photo）",
-                    "type": "text",
-                    "default": "/volume1/photo",
-                    "required": true,
-                    "ui:help": "请输入飞牛 NAS 照片目录的完整路径"
-                }
-            ]
-        }
-    ]
-}
+[
+    {
+        "stepTitle": "照片目录设置",
+        "items": [
+            {
+                "type": "text",
+                "field": "SCAN_DIR",
+                "label": "照片路径",
+                "initValue": "/volume1/photo",
+                "rules": [
+                    { "required": true, "message": "请输入照片目录路径" }
+                ]
+            }
+        ]
+    }
+]
