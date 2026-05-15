@@ -1,23 +1,15 @@
 #!/bin/bash
-# 安装前：加载 Docker 镜像
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PARENT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+PKG_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-# 尝试多个路径查找 image.tar
 IMAGE_TAR=""
-for candidate in "$PARENT_DIR/image.tar" "$TRIM_PKGINST_TEMP_DIR/image.tar" "$TRIM_TEMP_TPKFILE/image.tar" "./image.tar"; do
-    if [ -f "$candidate" ]; then
-        IMAGE_TAR="$candidate"
-        break
-    fi
+for p in "$PKG_DIR/image.tar" "$TRIM_PKGINST_TEMP_DIR/image.tar" "$TRIM_TEMP_TPKFILE/image.tar"; do
+    [ -f "$p" ] && IMAGE_TAR="$p" && break
 done
 
 if [ -n "$IMAGE_TAR" ]; then
-    echo "载入 Docker 镜像 ($(du -h "$IMAGE_TAR" | cut -f1)) ..."
+    echo "载入 Docker 镜像..."
     docker load -i "$IMAGE_TAR"
     echo "Docker 镜像载入完成"
-else
-    echo "未找到 image.tar 文件，请确保已构建 Docker 镜像"
-    echo "路径搜索: ${PARENT_DIR}/image.tar 等"
 fi
 exit 0

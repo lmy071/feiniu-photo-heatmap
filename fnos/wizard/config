@@ -1,16 +1,1 @@
-[
-    {
-        "stepTitle": "照片目录设置",
-        "items": [
-            {
-                "type": "text",
-                "field": "SCAN_DIR",
-                "label": "照片路径",
-                "initValue": "/volume1/photo",
-                "rules": [
-                    { "required": true, "message": "请输入照片目录路径" }
-                ]
-            }
-        ]
-    }
-]
+[]
