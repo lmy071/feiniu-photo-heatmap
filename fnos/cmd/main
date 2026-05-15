@@ -16,11 +16,7 @@ stop) exit 0 ;;
 status) is_docker_running && exit 0 || exit 3 ;;
 log)
     LINES="${2:-100}"
-    if [ -f "$FILE_PATH" ]; then
-        NAME=$(grep "container_name" "$FILE_PATH" | awk -F':' '{print $2}' | xargs)
-        [ -n "$NAME" ] && docker logs --tail "$LINES" "$NAME" 2>&1
-    fi
-    exit 0
-    ;;
+    [ -f "$FILE_PATH" ] && docker logs --tail "$LINES" "$(grep container_name "$FILE_PATH" | awk -F':' '{print $2}' | xargs)" 2>&1
+    exit 0 ;;
 *) exit 1 ;;
 esac

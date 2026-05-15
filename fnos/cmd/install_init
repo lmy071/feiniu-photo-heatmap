@@ -1,15 +1,13 @@
 #!/bin/bash
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PKG_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-
 IMAGE_TAR=""
 for p in "$PKG_DIR/image.tar" "$TRIM_PKGINST_TEMP_DIR/image.tar" "$TRIM_TEMP_TPKFILE/image.tar"; do
     [ -f "$p" ] && IMAGE_TAR="$p" && break
 done
-
 if [ -n "$IMAGE_TAR" ]; then
     echo "载入 Docker 镜像..."
     docker load -i "$IMAGE_TAR"
-    echo "Docker 镜像载入完成"
+    echo "完成"
 fi
 exit 0
