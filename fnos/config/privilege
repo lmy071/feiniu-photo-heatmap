@@ -1,0 +1,7 @@
+{
+    "defaults": {
+        "run-as": "package"
+    },
+    "username": "feiniu-photo-heatmap",
+    "groupname": "feiniu-photo-heatmap"
+}

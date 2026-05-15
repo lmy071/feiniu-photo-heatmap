@@ -1,0 +1,16 @@
+appname         = feiniu-photo-heatmap
+version         = 1.0.0
+display_name    = 飞牛照片热力图
+platform        = x86
+maintainer      = lmy
+maintainer_url  = https://github.com/lmy071/feiniu-photo-heatmap
+distributor     = lmy
+distributor_url = https://github.com/lmy071/feiniu-photo-heatmap
+desktop_uidir   = ui
+desktop_applaunchname = feiniu-photo-heatmap.Application
+service_port    = 3000
+checkport       = true
+desc            = 扫描飞牛 NAS 照片目录，生成 GitHub 风格的每日照片数量热力图。<br><br>基于 Node.js 构建，通过文件系统扫描照片文件，统计每日新增照片数量并以热力图形式展示。
+source          = thirdparty
+os_min_version  = 0.0.0
+checksum        = ff9d9ae8066eacdb6c2e3b9945287d31

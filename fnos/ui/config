@@ -1,0 +1,15 @@
+{
+    ".url": {
+        "feiniu-photo-heatmap.Application":
+        {
+            "title": "飞牛照片热力图",
+            "desc": "扫描照片目录，生成每日照片热力图",
+            "icon": "images/{0}.png",
+            "type": "url",
+            "port": "3000",
+            "protocol": "http",
+            "url": "/",
+            "allUsers": true
+        }
+    }
+}

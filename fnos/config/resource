@@ -1,0 +1,20 @@
+{
+    "docker-project": {
+        "projects": [
+            {
+                "name": "feiniu-photo-heatmap",
+                "path": "docker"
+            }
+        ]
+    },
+    "data-share": {
+        "shares": [
+            {
+                "name": "照片目录",
+                "permission": {
+                    "ro": ["feiniu-photo-heatmap"]
+                }
+            }
+        ]
+    }
+}
